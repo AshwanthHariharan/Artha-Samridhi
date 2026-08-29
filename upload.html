@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artha Samridhi</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f1f2f6;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #8a8aa8;
+            --accent-1: #1a237e;
+            --accent-2: #283593;
+            --accent-3: #3949ab;
+            --accent-gradient: linear-gradient(135deg, #1a237e 0%, #283593 40%, #3949ab 70%, #5c6bc0 100%);
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --success-color: #2e7d32;
+            --error-color: #c62828;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+            animation: orbFloat 25s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(26, 35, 126, 0.06);
+            top: -15%;
+            right: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(57, 73, 171, 0.04);
+            bottom: -15%;
+            left: -10%;
+            animation-delay: -8s;
+        }
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(26, 35, 126, 0.03);
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: -16s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -60px) scale(1.1); }
+            66% { transform: translate(-40px, 50px) scale(0.9); }
+            100% { transform: translate(30px, -30px) scale(1.05); }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1200px;
+            z-index: 1000;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(24px);
+            border-radius: 60px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .navbar.scrolled {
+            top: 0;
+            left: 0;
+            transform: translateX(0);
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            padding: 10px 32px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .logo .logo-img {
+            height: 38px;
+            width: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(26, 35, 126, 0.10);
+            padding: 2px;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .logo .logo-img {
+            height: 34px;
+            width: 34px;
+        }
+
+        .logo .logo-text {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .logo .logo-text .highlight {
+            color: var(--accent-1);
+        }
+
+        .logo .logo-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            margin-left: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 40px;
+            background: var(--accent-gradient);
+            color: #fff !important;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.15);
+            letter-spacing: 0.02em;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(26, 35, 126, 0.20);
+            color: #fff !important;
+        }
+
+        .nav-cta i {
+            margin-right: 8px;
+        }
+
+        .navbar.scrolled .nav-cta {
+            padding: 10px 44px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 140px 24px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            opacity: 0.3;
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .upload-header .icon {
+            font-size: 3rem;
+            color: var(--accent-1);
+            margin-bottom: 12px;
+        }
+
+        .upload-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .upload-header h1 .highlight {
+            color: var(--accent-1);
+        }
+
+        .upload-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .form-group label .required {
+            color: var(--error-color);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.08);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group .file-input-wrapper {
+            position: relative;
+            border: 2px dashed rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .form-group .file-input-wrapper:hover {
+            border-color: rgba(26, 35, 126, 0.20);
+            background: rgba(26, 35, 126, 0.02);
+        }
+
+        .form-group .file-input-wrapper i {
+            font-size: 2rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .form-group .file-input-wrapper p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-group .file-input-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .form-group .file-name {
+            font-size: 0.8rem;
+            color: var(--success-color);
+            margin-top: 8px;
+            display: none;
+        }
+
+        .form-group .file-name.show {
+            display: block;
+        }
+
+        .alert {
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+        }
+
+        .alert.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert.error {
+            background: rgba(198, 40, 40, 0.06);
+            border-color: rgba(198, 40, 40, 0.12);
+            color: var(--error-color);
+        }
+
+        .alert.success {
+            background: rgba(46, 125, 50, 0.06);
+            border-color: rgba(46, 125, 50, 0.12);
+            color: var(--success-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(26, 35, 126, 0.20);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stored-data {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .stored-data h4 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .stored-data .data-item {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .stored-data .data-item strong {
+            color: var(--text-primary);
+        }
+
+        .stored-data .data-item .status {
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        .stored-data .data-item .status.pending {
+            color: #ef6c00;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                top: 0;
+                left: 0;
+                transform: translateX(0);
+                width: 100%;
+                border-radius: 0;
+                padding: 10px 16px;
+                background: rgba(255, 255, 255, 0.90);
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            }
+            .navbar.scrolled {
+                padding: 8px 16px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .container {
+                padding: 110px 16px 30px;
+            }
+            .upload-card {
+                padding: 24px 18px;
+            }
+            .upload-header h1 {
+                font-size: 1.4rem;
+            }
+            .nav-cta {
+                padding: 8px 24px;
+                font-size: 0.8rem;
+                min-width: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 100px 12px 20px;
+            }
+            .upload-card {
+                padding: 18px 14px;
+                border-radius: 12px;
+            }
+            .upload-header .icon {
+                font-size: 2rem;
+            }
+            .upload-header h1 {
+                font-size: 1.2rem;
+            }
+            .navbar {
+                padding: 8px 14px;
+            }
+            .navbar.scrolled {
+                padding: 6px 14px;
+            }
+            .logo .logo-img {
+                height: 28px;
+                width: 28px;
+            }
+            .logo .logo-text {
+                font-size: 1rem;
+            }
+            .nav-cta {
+                padding: 6px 18px;
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+            .nav-cta i {
+                margin-right: 4px;
+            }
+            .form-group .file-input-wrapper {
+                padding: 20px;
+            }
+        }
+                /* ========== CHATBOT BUTTON ========== */
+        .chatbot-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 20px rgba(26, 35, 126, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .chatbot-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 40px rgba(26, 35, 126, 0.35);
+        }
+
+        .chatbot-fab .fa-robot {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* ===== CHATBOT SIDEBAR ===== */
+        .chatbot-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg-card);
+            box-shadow: -4px 0 40px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .chatbot-sidebar.open {
+            right: 0;
+        }
+
+        .chatbot-sidebar-header {
+            padding: 20px 24px;
+            background: var(--accent-gradient);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .chatbot-sidebar-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chatbot-sidebar-header .close-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 4px;
+        }
+
+        .chatbot-sidebar-header .close-btn:hover {
+            color: #fff;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: var(--bg-primary);
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(26, 35, 126, 0.15);
+            border-radius: 10px;
+        }
+
+        .chatbot-message {
+            display: flex;
+            gap: 10px;
+            max-width: 92%;
+            animation: slideIn 0.3s ease;
+        }
+
+        .chatbot-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .chatbot-message.bot {
+            align-self: flex-start;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chatbot-message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .chatbot-message.bot .chatbot-message-avatar {
+            background: var(--accent-gradient);
+            color: #fff;
+        }
+
+        .chatbot-message.user .chatbot-message-avatar {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-muted);
+        }
+
+        .chatbot-message-content {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .chatbot-message.bot .chatbot-message-content {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-top-left-radius: 4px;
+        }
+
+        .chatbot-message.user .chatbot-message-content {
+            background: var(--accent-gradient);
+            color: #fff;
+            border-top-right-radius: 4px;
+        }
+
+        .chatbot-message-content p {
+            margin: 0;
+        }
+
+        .chatbot-message-content p + p {
+            margin-top: 6px;
+        }
+
+        .chatbot-typing {
+            display: flex;
+            gap: 4px;
+            padding: 4px 0;
+        }
+
+        .chatbot-typing span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+
+        .chatbot-typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chatbot-typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .chatbot-input-area {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            background: var(--bg-card);
+        }
+
+        .chatbot-input-area input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .chatbot-input-area input:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.06);
+        }
+
+        .chatbot-input-area input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chatbot-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chatbot-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.20);
+        }
+
+        .chatbot-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chatbot-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .chatbot-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SOFT ORBS ===== -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Artha Samridhi" class="logo-img" onerror="this.style.display='none'" />
+                <span class="logo-text">Artha<span class="highlight">Samridhi</span><span class="logo-dot"></span></span>
+            </a>
+            <div class="nav-links">
+                <a href="entrepreneur-dashboard.html"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                <a href="profile.html" class="nav-cta">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="container">
+        <div class="upload-card">
+            <div class="upload-header">
+                <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                <h1>Upload Your <span class="highlight">Idea</span></h1>
+                <p>Share your vision with investors and get the funding you need</p>
+            </div>
+
+            <div id="alert" class="alert"></div>
+
+            <form id="uploadForm" enctype="multipart/form-data" novalidate>
+                <div class="form-group">
+                    <label>Capital Investment Needed <span class="required">*</span></label>
+                    <input type="number" id="capitalNeeded" name="capitalNeeded" placeholder="Enter amount in USD" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Abstract of the Idea <span class="required">*</span></label>
+                    <textarea id="ideaAbstract" name="ideaAbstract" placeholder="Describe your idea in detail..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Proof of Concept Report <span class="required">*</span></label>
+                    <div class="file-input-wrapper">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>Click to upload or drag and drop<br><small>PDF, DOC, DOCX (Max 10MB)</small></p>
+                        <input type="file" id="pocReport" name="pocReport" accept=".pdf,.doc,.docx" required />
+                    </div>
+                    <div class="file-name" id="pocFileName"><i class="fas fa-check-circle"></i> <span></span></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Business Plan <span class="required">*</span></label>
+                    <div class="file-input-wrapper">
+                        <i class="fas fa-file-alt"></i>
+                        <p>Click to upload or drag and drop<br><small>PDF, DOC, DOCX (Max 10MB)</small></p>
+                        <input type="file" id="businessPlan" name="businessPlan" accept=".pdf,.doc,.docx" required />
+                    </div>
+                    <div class="file-name" id="planFileName"><i class="fas fa-check-circle"></i> <span></span></div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </form>
+
+            <!-- ===== STORED DATA DISPLAY ===== -->
+            <div class="stored-data" id="storedData">
+                <h4><i class="fas fa-database"></i> Your Uploaded Ideas</h4>
+                <div id="ideasList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- ===== CHATBOT FAB BUTTON ===== -->
+    <button class="chatbot-fab" onclick="toggleChatbot()" id="chatbotToggle" title="Chat with AI Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- ===== CHATBOT SIDEBAR ===== -->
+    <div class="chatbot-sidebar" id="chatbotSidebar">
+        <div class="chatbot-sidebar-header">
+            <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+            <button class="close-btn" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot">
+                <div class="chatbot-message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-message-content">
+                    <p>Hello! 👋 I'm your AI assistant for Artha Samridhi. How can I help you with your venture today?</p>
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Type your message..." onkeydown="handleChatbotKeypress(event)" />
+            <button class="chatbot-send-btn" onclick="sendChatbotMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+        <script src="chatbot.js"></script>
+        <script src="translator.js"></script>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ===== CONFIGURATION =====
+        const API_URL = 'http://localhost:5000';
+
+        // ===== CHECK USER =====
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+            window.location.href = 'index.html';
+        }
+
+        if (userData.role !== 'ENTREPRENEUR') {
+            window.location.href = 'profile.html';
+        }
+
+        // ===== NAVBAR SCROLL =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // ===== FILE INPUT HANDLERS =====
+        document.getElementById('pocReport').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            const display = document.getElementById('pocFileName');
+            if (fileName) {
+                display.querySelector('span').textContent = fileName;
+                display.classList.add('show');
+            } else {
+                display.classList.remove('show');
+            }
+        });
+
+        document.getElementById('businessPlan').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            const display = document.getElementById('planFileName');
+            if (fileName) {
+                display.querySelector('span').textContent = fileName;
+                display.classList.add('show');
+            } else {
+                display.classList.remove('show');
+            }
+        });
+
+        // ===== ALERT HELPER =====
+        function showAlert(message, type = 'error') {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.textContent = message;
+            alertDiv.className = 'alert ' + type + ' show';
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        // ===== FETCH IDEAS FROM BACKEND =====
+        async function fetchIdeas() {
+            try {
+                const response = await fetch(`${API_URL}/api/ideas/${userData.id}`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    renderStoredIdeas(result.ideas || []);
+                } else {
+                    console.error('Error fetching ideas:', result.error);
+                }
+            } catch (error) {
+                console.error('Error fetching ideas:', error);
+            }
+        }
+
+        // ===== RENDER STORED IDEAS =====
+        function renderStoredIdeas(ideas) {
+            const container = document.getElementById('ideasList');
+
+            if (!ideas || ideas.length === 0) {
+                container.innerHTML = `
+                    <div class="data-item" style="text-align: center; color: var(--text-muted);">
+                        <i class="fas fa-info-circle"></i> No ideas uploaded yet. Submit your first idea above!
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = ideas.map((idea, index) => `
+                <div class="data-item">
+                    <strong>${index + 1}. ${idea.ideaAbstract.substring(0, 60)}${idea.ideaAbstract.length > 60 ? '...' : ''}</strong><br>
+                    <span style="color: var(--text-muted); font-size: 0.8rem;">
+                        Capital: $${idea.capitalNeeded} | 
+                        POC: ${idea.pocReportName} | 
+                        Business Plan: ${idea.businessPlanName}
+                    </span>
+                    <span class="status ${idea.status === 'Pending Review' ? 'pending' : ''}"> ● ${idea.status}</span>
+                    <span style="color: var(--text-muted); font-size: 0.7rem; display: block; margin-top: 4px;">
+                        Submitted: ${new Date(idea.submittedAt).toLocaleString()}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // ===== FORM SUBMISSION =====
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const capitalNeeded = document.getElementById('capitalNeeded').value;
+            const ideaAbstract = document.getElementById('ideaAbstract').value;
+            const pocReport = document.getElementById('pocReport').files[0];
+            const businessPlan = document.getElementById('businessPlan').files[0];
+
+            if (!capitalNeeded || !ideaAbstract || !pocReport || !businessPlan) {
+                showAlert('Please fill in all fields and upload both documents.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Uploading...';
+
+            try {
+                // Create FormData for file upload
+                const formData = new FormData();
+                formData.append('entrepreneurId', userData.id);
+                formData.append('capitalNeeded', capitalNeeded);
+                formData.append('ideaAbstract', ideaAbstract);
+                formData.append('pocReport', pocReport);
+                formData.append('businessPlan', businessPlan);
+
+                const response = await fetch(`${API_URL}/api/upload-idea`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert('✅ Your idea has been uploaded successfully! It will be reviewed by investors.', 'success');
+                    
+                    // Update user data in localStorage with new ideas
+                    if (result.user) {
+                        localStorage.setItem('userData', JSON.stringify(result.user));
+                    }
+                    
+                    // Refresh the ideas list
+                    await fetchIdeas();
+                    
+                    // Reset form
+                    document.getElementById('uploadForm').reset();
+                    document.getElementById('pocFileName').classList.remove('show');
+                    document.getElementById('planFileName').classList.remove('show');
+                } else {
+                    showAlert(result.error || 'Upload failed. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showAlert('Network error. Please check if the server is running.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+            }
+        });
+
+        // ===== INIT =====
+        fetchIdeas();
+
+        console.log('%c📤 Upload Idea', 'font-size: 16px; font-weight: bold; color: #1a237e;');
+        console.log('%c✅ Data is being stored in users.json via backend API', 'font-size: 14px; color: #2e7d32;');
+        console.log('%c📊 Check the "Your Uploaded Ideas" section below to verify storage.', 'font-size: 14px; color: #4a4a6a;');
+        console.log('%c📁 Files are stored in the "uploads" folder on the server', 'font-size: 14px; color: #4a4a6a;');
+    </script>
+
+</body>
+</html>

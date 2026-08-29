@@ -1,0 +1,240 @@
+[
+  {
+    "id": "bae34b45-0a3f-4705-b1ee-a2c7c78a471b",
+    "fullName": "Sam",
+    "dob": "2009-05-04",
+    "email": "Sam@gmail.com",
+    "mobile": "9876543210",
+    "role": "ENTREPRENEUR",
+    "password": "$2a$10$HtbPHwFngV3wc3zWK66MAOvJCgc7q.xgl/XAX7/RSFSNDrX.9FWrO",
+    "createdAt": "2026-08-27T12:17:17.878Z",
+    "ideas": [],
+    "entrepreneurDetails": {
+      "companyName": "Apex",
+      "industry": "AI/ML",
+      "stage": "Series A",
+      "fundingGoal": "500000",
+      "teamSize": "1",
+      "qualification": "M.Tech"
+    }
+  },
+  {
+    "id": "2f6fb12d-95c0-4798-ab66-49091416de6a",
+    "fullName": "Tom Holland",
+    "dob": "2009-05-04",
+    "email": "tom@gmail.com",
+    "mobile": "9876543211",
+    "role": "CA_GRADUATE",
+    "password": "$2a$10$fT.9bBJAAcipzYR6JE3F2OOYpqDfA32ZDNiBCZB0gx7/EPu3AbhQS",
+    "createdAt": "2026-08-27T13:14:24.620Z",
+    "ideas": [],
+    "caDetails": {
+      "registrationNumber": "12345",
+      "specialization": "Taxation",
+      "experience": "5",
+      "firmName": null
+    }
+  },
+  {
+    "id": "d4c8a2f7-19be-4391-8278-81bdc746bee0",
+    "fullName": "Robert Downey",
+    "dob": "2009-05-04",
+    "email": "Robert@gmail.com",
+    "mobile": "987654312",
+    "role": "ADVOCATE",
+    "password": "$2a$10$9dwYAH1RvmF2rNF1/6.gruRiIAuqVJQXUodSfYB9fiqpFDPHh6n9G",
+    "createdAt": "2026-08-27T13:48:27.395Z",
+    "ideas": [],
+    "advocateDetails": {
+      "barCouncilId": "12345678",
+      "specialization": "Corporate Law",
+      "experience": "5",
+      "firmName": null,
+      "courtPracticed": "Supreme Court"
+    }
+  },
+  {
+    "id": "89add45a-297f-4a50-aac4-d5434f9d9df7",
+    "fullName": "Chris Evans",
+    "dob": "2009-05-04",
+    "email": "Chris@gmail.com",
+    "mobile": "9876543213",
+    "role": "INVESTOR",
+    "password": "$2a$10$PWbGLyQjqemq5Ul5sAm3KuskmfPi48q8eAbh0IWxPOC4rDE/ouUqq",
+    "createdAt": "2026-08-27T14:00:33.046Z",
+    "ideas": [],
+    "investorDetails": {
+      "amount": "2000000",
+      "portfolios": "5",
+      "industry": "AI/ML",
+      "firmType": "Private Equity",
+      "qualification": "M.Com",
+      "natureOfInvestment": "Royalty"
+    }
+  },
+  {
+    "id": "23b0faa6-6416-4510-895c-5ef2b7e47fff",
+    "fullName": "Mark Ruffalo",
+    "dob": "2007-05-04",
+    "email": "Mark@gmail.com",
+    "mobile": "9876543214",
+    "role": "CA_GRADUATE",
+    "password": "$2a$10$JX9PUTE9PpIcxijzYYrGMOXD5UWSHUzYIXw/8PEXqWtaa7AaNypAi",
+    "createdAt": "2026-08-27T17:57:07.055Z",
+    "ideas": [],
+    "caDetails": {
+      "registrationNumber": "23456",
+      "specialization": "Taxation",
+      "experience": "5",
+      "firmName": null
+    }
+  },
+  {
+    "id": "f722ff96-43fe-4c48-9953-acae0fc7dc9f",
+    "fullName": "Chris Hemmsworth",
+    "dob": "2007-05-04",
+    "email": "hemmsworth@gmail.com",
+    "mobile": "9876543215",
+    "role": "INVESTOR",
+    "password": "$2a$10$tB7xv0cfp4u4WrM8VcCY0.HchPuQLCmK0igpSVbJWH6R3t7HYjuVG",
+    "createdAt": "2026-08-27T17:59:58.286Z",
+    "ideas": [],
+    "investorDetails": {
+      "amount": "499978",
+      "portfolios": "5",
+      "industry": "Technology",
+      "firmType": "Private Equity",
+      "qualification": "M.Sc",
+      "natureOfInvestment": "Equity"
+    }
+  },
+  {
+    "id": "9add4d97-5eea-4162-9d04-dd36fb26f9b9",
+    "fullName": "Tony stark",
+    "dob": "2009-05-04",
+    "email": "Tony@gmail.com",
+    "mobile": "9876543216",
+    "role": "ADVOCATE",
+    "password": "$2a$10$k/2z0tWwDuLFj5MckKx5Z.F0NbAdZhhe3iLExr2WeVK447wIjOIxi",
+    "createdAt": "2026-08-27T18:10:57.088Z",
+    "ideas": [],
+    "advocateDetails": {
+      "barCouncilId": "23456789",
+      "specialization": "Tax Law",
+      "experience": "5",
+      "firmName": null,
+      "courtPracticed": "Supreme Court"
+    }
+  },
+  {
+    "id": "6ac0b8fb-af66-4cea-9c8b-791e669cb2ce",
+    "fullName": "Peter Parker",
+    "dob": "2009-05-04",
+    "email": "Peter@gmail.com",
+    "mobile": "9876543217",
+    "role": "INVESTOR",
+    "password": "$2a$10$GYhRUGiqz5jcnzAR74NJN.QnHfuCSsN0QrGHKLiLH.8n7Ij43I2Ji",
+    "createdAt": "2026-08-27T18:14:24.327Z",
+    "ideas": [],
+    "investorDetails": {
+      "amount": "5000000",
+      "portfolios": "15",
+      "industry": "Fintech",
+      "firmType": "Private Equity",
+      "qualification": "Data Science",
+      "natureOfInvestment": "Hybrid"
+    }
+  },
+  {
+    "id": "640028c2-4071-475f-9597-a7edce6f9836",
+    "fullName": "Steve Rogers",
+    "dob": "2009-05-04",
+    "email": "Steve@gmail.com",
+    "mobile": "9876543218",
+    "role": "ADVOCATE",
+    "password": "$2a$10$Bsmd6UtCG9cRyP2Lr2PEQO0OUuaDt/7KrJkkRbWIW0iHmlpv76p12",
+    "createdAt": "2026-08-27T18:16:08.361Z",
+    "ideas": [],
+    "advocateDetails": {
+      "barCouncilId": "34567890",
+      "specialization": "Tax Law",
+      "experience": "5",
+      "firmName": null,
+      "courtPracticed": "Supreme Court"
+    }
+  },
+  {
+    "id": "d5a2ac37-e980-4056-a188-855086b1921e",
+    "fullName": "Bruce banners",
+    "dob": "2009-05-04",
+    "email": "Bruce@gmail.com",
+    "mobile": "9876543219",
+    "role": "INVESTOR",
+    "password": "$2a$10$ul1ysvwJOcBT3Z/VN7pyp.V5dtq9b1KinbT3b5JZRukLKwMHqczx2",
+    "createdAt": "2026-08-27T18:18:21.852Z",
+    "ideas": [],
+    "investorDetails": {
+      "amount": "5000000",
+      "portfolios": "5",
+      "industry": "Blockchain",
+      "firmType": "Angel Investor",
+      "qualification": "M.Tech",
+      "natureOfInvestment": "SAFE"
+    }
+  },
+  {
+    "id": "297d5526-1761-4668-b933-f412b0f7479d",
+    "fullName": "Thor Odinson",
+    "dob": "2009-05-04",
+    "email": "Thor@gmail.com",
+    "mobile": "987654311",
+    "role": "CA_GRADUATE",
+    "password": "$2a$10$OK14J0BUjT8TxzOrQHiSTeovIJko4t7KWbKUkEByz.QwJ1Du//fKe",
+    "createdAt": "2026-08-27T18:20:24.494Z",
+    "ideas": [],
+    "caDetails": {
+      "registrationNumber": "34567",
+      "specialization": "M&A",
+      "experience": "2",
+      "firmName": null
+    }
+  },
+  {
+    "id": "00e14e4f-053b-4f56-b89b-a9c3c67a8003",
+    "fullName": "Loki",
+    "dob": "2009-05-04",
+    "email": "Loki@gmail.com",
+    "mobile": "9876543112",
+    "role": "ENTREPRENEUR",
+    "password": "$2a$10$eUbCkDrxiLaYWuBHN.CCReXfPrPmuDn.ggdT7bXLjVOyAva6945kO",
+    "createdAt": "2026-08-27T18:24:01.858Z",
+    "ideas": [],
+    "entrepreneurDetails": {
+      "companyName": "Loki",
+      "industry": "CleanTech",
+      "stage": "Growth",
+      "fundingGoal": "500000",
+      "teamSize": "1",
+      "qualification": "M.Com"
+    }
+  },
+  {
+    "id": "33015047-e85b-4e16-b1fd-8e226f1f6ca6",
+    "fullName": "Anthony",
+    "dob": "2009-05-04",
+    "email": "Anthony@gmail.com",
+    "mobile": "9876543223",
+    "role": "INVESTOR",
+    "password": "$2a$10$gXAxGXl6I8x0WEtbg2LmfOF1U635l2ccLQePkqM8F0NgLuv9aU20K",
+    "createdAt": "2026-08-27T18:29:08.934Z",
+    "ideas": [],
+    "investorDetails": {
+      "amount": "5000000",
+      "portfolios": "5",
+      "industry": "AI/ML",
+      "firmType": "Hedge Fund",
+      "qualification": "Data Architect",
+      "natureOfInvestment": "Royalty"
+    }
+  }
+]

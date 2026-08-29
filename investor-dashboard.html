@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artha Samridhi — Investor Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f1f2f6;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #8a8aa8;
+            --accent-1: #1a237e;
+            --accent-2: #283593;
+            --accent-3: #3949ab;
+            --accent-4: #5c6bc0;
+            --accent-gradient: linear-gradient(135deg, #1a237e 0%, #283593 40%, #3949ab 70%, #5c6bc0 100%);
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 40px rgba(26, 35, 126, 0.10);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --success-color: #2e7d32;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========== SOFT ORBS ========== */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+            animation: orbFloat 25s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(26, 35, 126, 0.06);
+            top: -15%;
+            right: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(57, 73, 171, 0.04);
+            bottom: -15%;
+            left: -10%;
+            animation-delay: -8s;
+        }
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(26, 35, 126, 0.03);
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: -16s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -60px) scale(1.1); }
+            66% { transform: translate(-40px, 50px) scale(0.9); }
+            100% { transform: translate(30px, -30px) scale(1.05); }
+        }
+
+        /* ========== LANGUAGE SELECTOR ========== */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 100px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            font-family: inherit;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--text-primary);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius-sm);
+            padding: 6px 0;
+            box-shadow: var(--shadow-hover);
+            min-width: 180px;
+            max-height: 350px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .lang-dropdown.open {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .lang-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .lang-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            color: var(--text-primary);
+        }
+
+        .lang-item.active {
+            background: rgba(26, 35, 126, 0.06);
+            color: var(--accent-1);
+        }
+
+        .lang-item .lang-code {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+
+        .lang-item .lang-check {
+            margin-left: auto;
+            color: var(--accent-1);
+            font-size: 0.7rem;
+        }
+
+        #translatingStatus {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: 8px;
+            display: none;
+        }
+
+        #translatingStatus i {
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1200px;
+            z-index: 1000;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(24px);
+            border-radius: 60px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .navbar.scrolled {
+            top: 0;
+            left: 0;
+            transform: translateX(0);
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            padding: 10px 32px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .logo .logo-img {
+            height: 38px;
+            width: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(26, 35, 126, 0.10);
+            padding: 2px;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .logo .logo-img {
+            height: 34px;
+            width: 34px;
+        }
+
+        .logo .logo-text {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .logo .logo-text .highlight {
+            color: var(--accent-1);
+        }
+
+        .logo .logo-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            margin-left: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 40px;
+            background: var(--accent-gradient);
+            color: #fff !important;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.15);
+            letter-spacing: 0.02em;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(26, 35, 126, 0.20);
+            color: #fff !important;
+        }
+
+        .nav-cta i {
+            margin-right: 8px;
+        }
+
+        .navbar.scrolled .nav-cta {
+            padding: 10px 44px;
+        }
+
+        /* ========== DASHBOARD CONTAINER ========== */
+        .dashboard-container {
+            padding: 140px 24px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== HEADER ========== */
+        .dashboard-header {
+            margin-bottom: 32px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .dashboard-header h1 .highlight {
+            color: var(--accent-1);
+        }
+
+        .dashboard-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+
+        /* ========== TOP NAV BAR ========== */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 12px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .top-nav .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .top-nav .nav-items a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .top-nav .nav-items a:hover {
+            background: rgba(26, 35, 126, 0.04);
+            color: var(--accent-1);
+        }
+
+        .top-nav .nav-items a.active {
+            background: rgba(26, 35, 126, 0.06);
+            color: var(--accent-1);
+        }
+
+        .top-nav .nav-items a i {
+            margin-right: 6px;
+        }
+
+        /* ========== DASHBOARD GRID ========== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 24px;
+        }
+
+        /* ========== LEFT PANEL - INSURANCE COMPANIES ========== */
+        .left-panel {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .left-panel h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .left-panel h3 i {
+            color: var(--accent-1);
+        }
+
+        .insurance-item {
+            padding: 12px 14px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .insurance-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            border-color: rgba(26, 35, 126, 0.08);
+            transform: translateX(4px);
+        }
+
+        .insurance-item .insurance-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(26, 35, 126, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-1);
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .insurance-item .insurance-info {
+            flex: 1;
+        }
+
+        .insurance-item .insurance-info .name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .insurance-item .insurance-info .type {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .insurance-item .insurance-badge {
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 100px;
+            background: rgba(46, 125, 50, 0.08);
+            color: var(--success-color);
+        }
+
+        .insurance-item .insurance-arrow {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        /* ========== CENTER PANEL - ENTREPRENEURS ========== */
+        .center-panel {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .center-panel .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .center-panel .panel-header h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .center-panel .panel-header h3 i {
+            color: var(--accent-1);
+        }
+
+        .center-panel .panel-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.04);
+            padding: 2px 12px;
+            border-radius: 100px;
+        }
+
+        .entrepreneur-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .entrepreneur-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            border-color: rgba(26, 35, 126, 0.08);
+            transform: translateX(4px);
+        }
+
+        .entrepreneur-item .e-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .entrepreneur-item .e-info {
+            flex: 1;
+        }
+
+        .entrepreneur-item .e-info .name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .entrepreneur-item .e-info .details {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .entrepreneur-item .e-info .details i {
+            margin-right: 4px;
+            color: var(--text-muted);
+        }
+
+        .entrepreneur-item .e-status {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 100px;
+            background: rgba(247, 127, 0, 0.08);
+            color: #ef6c00;
+            font-weight: 500;
+        }
+
+        .entrepreneur-item .e-status.reviewed {
+            background: rgba(46, 125, 50, 0.08);
+            color: var(--success-color);
+        }
+
+        .entrepreneur-item .e-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .no-entrepreneurs {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-entrepreneurs i {
+            font-size: 4rem;
+            opacity: 0.2;
+            margin-bottom: 16px;
+            color: var(--accent-1);
+        }
+
+        .no-entrepreneurs h4 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .no-entrepreneurs p {
+            font-size: 0.95rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* ========== RIGHT PANEL - CRM ========== */
+        .right-panel {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .right-panel h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .right-panel h3 i {
+            color: var(--accent-1);
+        }
+
+        .crm-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .crm-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            border-color: rgba(26, 35, 126, 0.08);
+            transform: translateX(4px);
+        }
+
+        .crm-item .crm-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .crm-item .crm-info {
+            flex: 1;
+        }
+
+        .crm-item .crm-info .name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .crm-item .crm-info .role {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .crm-item .crm-email-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 4px;
+            font-size: 0.85rem;
+        }
+
+        .crm-item .crm-email-btn:hover {
+            color: #d44637;
+            transform: scale(1.1);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 240px 1fr 260px;
+                gap: 18px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .left-panel,
+            .right-panel {
+                max-height: 400px;
+                overflow-y: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                top: 0;
+                left: 0;
+                transform: translateX(0);
+                width: 100%;
+                border-radius: 0;
+                padding: 10px 16px;
+                background: rgba(255, 255, 255, 0.90);
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            }
+            .navbar.scrolled {
+                padding: 8px 16px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .dashboard-container {
+                padding: 110px 16px 30px;
+            }
+            .top-nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .top-nav .nav-items {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .top-nav .nav-items a {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+            .left-panel,
+            .right-panel {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+            .entrepreneur-item {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .entrepreneur-item .e-arrow {
+                margin-left: auto;
+            }
+            .language-selector {
+                margin-left: 4px;
+            }
+            .lang-btn .lang-label {
+                display: none;
+            }
+            .lang-dropdown {
+                right: -20px;
+                min-width: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 100px 12px 20px;
+            }
+            .dashboard-header h1 {
+                font-size: 1.3rem;
+            }
+            .navbar {
+                padding: 8px 14px;
+            }
+            .navbar.scrolled {
+                padding: 6px 14px;
+            }
+            .logo .logo-img {
+                height: 28px;
+                width: 28px;
+            }
+            .logo .logo-text {
+                font-size: 1rem;
+            }
+            .nav-cta {
+                padding: 6px 18px;
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+            .nav-cta i {
+                margin-right: 4px;
+            }
+            .left-panel,
+            .right-panel {
+                max-height: 250px;
+            }
+            .entrepreneur-item .e-info .details span {
+                display: block;
+                margin-right: 0;
+            }
+            .lang-btn {
+                padding: 4px 10px;
+                font-size: 0.7rem;
+            }
+            .lang-dropdown {
+                right: -40px;
+                min-width: 140px;
+            }
+        }
+                /* ========== CHATBOT BUTTON ========== */
+        .chatbot-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 20px rgba(26, 35, 126, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .chatbot-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 40px rgba(26, 35, 126, 0.35);
+        }
+
+        .chatbot-fab .fa-robot {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* ===== CHATBOT SIDEBAR ===== */
+        .chatbot-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg-card);
+            box-shadow: -4px 0 40px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .chatbot-sidebar.open {
+            right: 0;
+        }
+
+        .chatbot-sidebar-header {
+            padding: 20px 24px;
+            background: var(--accent-gradient);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .chatbot-sidebar-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chatbot-sidebar-header .close-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 4px;
+        }
+
+        .chatbot-sidebar-header .close-btn:hover {
+            color: #fff;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: var(--bg-primary);
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(26, 35, 126, 0.15);
+            border-radius: 10px;
+        }
+
+        .chatbot-message {
+            display: flex;
+            gap: 10px;
+            max-width: 92%;
+            animation: slideIn 0.3s ease;
+        }
+
+        .chatbot-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .chatbot-message.bot {
+            align-self: flex-start;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chatbot-message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .chatbot-message.bot .chatbot-message-avatar {
+            background: var(--accent-gradient);
+            color: #fff;
+        }
+
+        .chatbot-message.user .chatbot-message-avatar {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-muted);
+        }
+
+        .chatbot-message-content {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .chatbot-message.bot .chatbot-message-content {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-top-left-radius: 4px;
+        }
+
+        .chatbot-message.user .chatbot-message-content {
+            background: var(--accent-gradient);
+            color: #fff;
+            border-top-right-radius: 4px;
+        }
+
+        .chatbot-message-content p {
+            margin: 0;
+        }
+
+        .chatbot-message-content p + p {
+            margin-top: 6px;
+        }
+
+        .chatbot-typing {
+            display: flex;
+            gap: 4px;
+            padding: 4px 0;
+        }
+
+        .chatbot-typing span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+
+        .chatbot-typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chatbot-typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .chatbot-input-area {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            background: var(--bg-card);
+        }
+
+        .chatbot-input-area input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .chatbot-input-area input:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.06);
+        }
+
+        .chatbot-input-area input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chatbot-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chatbot-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.20);
+        }
+
+        .chatbot-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chatbot-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .chatbot-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SOFT ORBS ===== -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Artha Samridhi" class="logo-img" onerror="this.style.display='none'" />
+                <span class="logo-text">Artha<span class="highlight">Samridhi</span><span class="logo-dot"></span></span>
+            </a>
+
+            <div class="nav-links">
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="index.html" class="nav-cta">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+
+            <!-- ===== LANGUAGE SELECTOR ===== -->
+            <div class="language-selector">
+                <button class="lang-btn" onclick="toggleLanguageMenu()" title="Select Language (Ctrl+Shift+L)">
+                    <i class="fas fa-globe"></i>
+                    <span id="currentLangLabel" class="lang-label">English</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.6rem;"></i>
+                </button>
+                <div class="lang-dropdown" id="langDropdown"></div>
+            </div>
+            <span id="translatingStatus"><i class="fas fa-spinner fa-spin"></i> Translating...</span>
+
+        </div>
+    </nav>
+
+    <!-- ===== DASHBOARD CONTAINER ===== -->
+    <div class="dashboard-container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="dashboard-header">
+            <h1>Investor <span class="highlight">Dashboard</span></h1>
+            <p>Discover promising startups, review their ideas, and express your investment interest.</p>
+        </div>
+
+        <!-- ===== TOP NAV BAR ===== -->
+        <div class="top-nav">
+            <div class="nav-items">
+                <a href="#" class="active"><i class="fas fa-chart-line"></i> Opportunities</a>
+                <a href="legal.html"><i class="fas fa-gavel"></i> Legal</a>
+                <a href="tax.html"><i class="fas fa-calculator"></i> Tax</a>
+            </div>
+        </div>
+
+        <!-- ===== DASHBOARD GRID ===== -->
+        <div class="dashboard-grid">
+
+            <!-- ===== LEFT PANEL - INSURANCE COMPANIES ===== -->
+            <div class="left-panel">
+                <h3><i class="fas fa-shield-alt"></i> Insurance Partners</h3>
+                <div id="insuranceList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- ===== CENTER PANEL - ENTREPRENEURS ===== -->
+            <div class="center-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-lightbulb"></i> Entrepreneurs with Ideas</h3>
+                    <span class="count" id="entrepreneurCount">0</span>
+                </div>
+                <div id="entrepreneursList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- ===== RIGHT PANEL - CRM ===== -->
+            <div class="right-panel">
+                <h3><i class="fas fa-headset"></i> Investment Advisors</h3>
+                <div id="crmList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <!-- ===== CHATBOT FAB BUTTON ===== -->
+    <button class="chatbot-fab" onclick="toggleChatbot()" id="chatbotToggle" title="Chat with AI Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- ===== CHATBOT SIDEBAR ===== -->
+    <div class="chatbot-sidebar" id="chatbotSidebar">
+        <div class="chatbot-sidebar-header">
+            <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+            <button class="close-btn" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot">
+                <div class="chatbot-message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-message-content">
+                    <p>Hello! 👋 I'm your AI assistant for Artha Samridhi. How can I help you with your venture today?</p>
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Type your message..." onkeydown="handleChatbotKeypress(event)" />
+            <button class="chatbot-send-btn" onclick="sendChatbotMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="translator.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        // ===== CONFIGURATION =====
+        const API_URL = 'http://localhost:5000';
+
+        // ===== CHECK USER & ROLE =====
+        const userData = JSON.parse(localStorage.getItem('userData'));
+
+        if (!userData) {
+            window.location.href = 'index.html';
+        }
+
+        if (userData.role !== 'INVESTOR') {
+            window.location.href = 'profile.html';
+        }
+
+        // ===== NAVBAR SCROLL EFFECT =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // ===== INSURANCE COMPANIES DATA =====
+// ===== INSURANCE COMPANIES DATA =====
+const insuranceCompanies = [
+    { 
+        id: 1, 
+        name: 'Berkshire Hathaway', 
+        type: 'Reinsurance & Investment', 
+        icon: 'fa-building', 
+        badge: 'Top Rated',
+        founded: '1839',
+        headquarters: 'Omaha, USA',
+        website: 'https://www.berkshirehathaway.com/',
+        email: 'info@berkshirehathaway.com',
+        rating: 'AAA',
+        description: 'Berkshire Hathaway is a multinational conglomerate holding company, with GEICO and General Re as its core insurance operations, generating a massive float of over $165 billion.'
+    },
+    { 
+        id: 2, 
+        name: 'Progressive Corporation', 
+        type: 'Property & Casualty', 
+        icon: 'fa-shield-alt', 
+        badge: 'Best-in-Class',
+        founded: '1937',
+        headquarters: 'Mayfield, USA',
+        website: 'https://www.progressive.com/',
+        email: 'info@progressive.com',
+        rating: 'AA+',
+        description: 'Progressive is a leading U.S. property and casualty insurer known for its strong underwriting discipline, data-driven pricing, and consistent market share in personal auto insurance.'
+    },
+    { 
+        id: 3, 
+        name: 'Chubb Limited', 
+        type: 'Property & Casualty', 
+        icon: 'fa-building', 
+        badge: 'Premium',
+        founded: '1985',
+        headquarters: 'Zurich, Switzerland',
+        website: 'https://www.chubb.com/',
+        email: 'info@chubb.com',
+        rating: 'AA',
+        description: 'Chubb is the world\'s largest publicly traded property and casualty insurer, serving clients globally with a wide range of insurance products and services.'
+    },
+    { 
+        id: 4, 
+        name: 'Allianz SE', 
+        type: 'Property & Casualty', 
+        icon: 'fa-star', 
+        badge: 'Global Leader',
+        founded: '1890',
+        headquarters: 'Munich, Germany',
+        website: 'https://www.allianz.com/',
+        email: 'info@allianz.com',
+        rating: 'AA+',
+        description: 'Allianz is a German multinational financial services company headquartered in Munich, Germany. Its core businesses are insurance and asset management.'
+    },
+    { 
+        id: 5, 
+        name: 'MetLife Inc', 
+        type: 'Life Insurance', 
+        icon: 'fa-hand-holding-heart', 
+        badge: 'Trusted',
+        founded: '1868',
+        headquarters: 'New York, USA',
+        website: 'https://www.metlife.com/',
+        email: 'info@metlife.com',
+        rating: 'AA',
+        description: 'MetLife is one of the largest providers of life insurance, annuities, employee benefits, and asset management services in the United States.'
+    },
+    { 
+        id: 6, 
+        name: 'Prudential Financial', 
+        type: 'Life Insurance', 
+        icon: 'fa-life-ring', 
+        badge: 'Established',
+        founded: '1875',
+        headquarters: 'Newark, USA',
+        website: 'https://www.prudential.com/',
+        email: 'info@prudential.com',
+        rating: 'AA-',
+        description: 'Prudential Financial is a leading provider of life insurance, retirement services, and investment management products and services.'
+    },
+    { 
+        id: 7, 
+        name: 'The Travelers Companies', 
+        type: 'Property & Casualty', 
+        icon: 'fa-shield-alt', 
+        badge: 'Top Rated',
+        founded: '1853',
+        headquarters: 'New York, USA',
+        website: 'https://www.travelers.com/',
+        email: 'info@travelers.com',
+        rating: 'AA',
+        description: 'Travelers is a leading provider of property casualty insurance for auto, home, and business with a strong commercial-lines franchise.'
+    },
+    { 
+        id: 8, 
+        name: 'Allstate Corporation', 
+        type: 'Property & Casualty', 
+        icon: 'fa-building', 
+        badge: 'Popular',
+        founded: '1931',
+        headquarters: 'Northbrook, USA',
+        website: 'https://www.allstate.com/',
+        email: 'info@allstate.com',
+        rating: 'A+',
+        description: 'Allstate is a major U.S. personal-lines auto and home insurer, recovering from a rate-and-margin reset cycle with strong recovery potential.'
+    },
+    { 
+        id: 9, 
+        name: 'Aflac Incorporated', 
+        type: 'Supplemental Insurance', 
+        icon: 'fa-heartbeat', 
+        badge: 'Specialized',
+        founded: '1955',
+        headquarters: 'Columbus, USA',
+        website: 'https://www.aflac.com/',
+        email: 'info@aflac.com',
+        rating: 'AA',
+        description: 'Aflac is a leading supplemental insurance company, providing financial protection to more than 50 million people worldwide.'
+    },
+    { 
+        id: 10, 
+        name: 'Marsh & McLennan', 
+        type: 'Brokerage Services', 
+        icon: 'fa-handshake', 
+        badge: 'Premium',
+        founded: '1871',
+        headquarters: 'New York, USA',
+        website: 'https://www.mmc.com/',
+        email: 'info@mmc.com',
+        rating: 'A+',
+        description: 'Marsh & McLennan is a global professional services firm offering insurance brokerage, risk management, and consulting services to clients worldwide.'
+    },
+    { 
+        id: 11, 
+        name: 'Aon PLC', 
+        type: 'Brokerage Services', 
+        icon: 'fa-chart-line', 
+        badge: 'Leading',
+        founded: '1982',
+        headquarters: 'London, UK',
+        website: 'https://www.aon.com/',
+        email: 'info@aon.com',
+        rating: 'A+',
+        description: 'Aon is a leading global professional services firm providing a broad range of risk, retirement, and health solutions.'
+    },
+    { 
+        id: 12, 
+        name: 'Manulife Financial', 
+        type: 'Life Insurance', 
+        icon: 'fa-building', 
+        badge: 'Global',
+        founded: '1887',
+        headquarters: 'Toronto, Canada',
+        website: 'https://www.manulife.com/',
+        email: 'info@manulife.com',
+        rating: 'AA-',
+        description: 'Manulife is a diversified financial services firm with strong positions in insurance, wealth management, and asset management across North America and Asia.'
+    },
+    { 
+        id: 13, 
+        name: 'Sun Life Financial', 
+        type: 'Life Insurance', 
+        icon: 'fa-sun', 
+        badge: 'Trusted',
+        founded: '1871',
+        headquarters: 'Toronto, Canada',
+        website: 'https://www.sunlife.com/',
+        email: 'info@sunlife.com',
+        rating: 'AA',
+        description: 'Sun Life is a major provider of integrated financial and health services worldwide, offering life, health, disability, and long-term care coverage.'
+    },
+    { 
+        id: 14, 
+        name: 'American Financial Group', 
+        type: 'Property & Casualty', 
+        icon: 'fa-building', 
+        badge: 'Specialized',
+        founded: '1959',
+        headquarters: 'Cincinnati, USA',
+        website: 'https://www.afginc.com/',
+        email: 'info@afginc.com',
+        rating: 'A',
+        description: 'American Financial Group is a specialized property and casualty insurer focused on niche commercial markets with a rich history of underwriting expertise.'
+    },
+    { 
+        id: 15, 
+        name: 'CNA Financial', 
+        type: 'Property & Casualty', 
+        icon: 'fa-shield-alt', 
+        badge: 'Established',
+        founded: '1853',
+        headquarters: 'Chicago, USA',
+        website: 'https://www.cna.com/',
+        email: 'info@cna.com',
+        rating: 'A',
+        description: 'CNA Financial is a well-established commercial property and casualty insurer with a diversified portfolio backed by Loews Corp.'
+    },
+    { 
+        id: 16, 
+        name: 'Fidelity National Financial', 
+        type: 'Title Insurance', 
+        icon: 'fa-file-contract', 
+        badge: 'Specialized',
+        founded: '1847',
+        headquarters: 'Jacksonville, USA',
+        website: 'https://www.fnf.com/',
+        email: 'info@fnf.com',
+        rating: 'A',
+        description: 'Fidelity National Financial is a leading provider of title insurance and transaction services with a dominant position in the U.S. real estate ecosystem.'
+    },
+    { 
+        id: 17, 
+        name: 'Kinsale Capital Group', 
+        type: 'Specialty Insurance', 
+        icon: 'fa-rocket', 
+        badge: 'Growth',
+        founded: '2009',
+        headquarters: 'Richmond, USA',
+        website: 'https://www.kinsalecapital.com/',
+        email: 'info@kinsalecapital.com',
+        rating: 'A',
+        description: 'Kinsale Capital Group is the only pure-play specialty insurance company in the market, specializing in high-risk situations and complex challenges.'
+    },
+    { 
+        id: 18, 
+        name: 'The Hartford', 
+        type: 'Property & Casualty', 
+        icon: 'fa-building', 
+        badge: 'Trusted',
+        founded: '1810',
+        headquarters: 'Hartford, USA',
+        website: 'https://www.thehartford.com/',
+        email: 'info@thehartford.com',
+        rating: 'A+',
+        description: 'The Hartford is a leading provider of property and casualty insurance, group benefits, and mutual funds with a strong commercial-lines franchise.'
+    },
+    { 
+        id: 19, 
+        name: 'AXA Group', 
+        type: 'Property & Casualty', 
+        icon: 'fa-star', 
+        badge: 'Global',
+        founded: '1816',
+        headquarters: 'Paris, France',
+        website: 'https://www.axa.com/',
+        email: 'info@axa.com',
+        rating: 'AA',
+        description: 'AXA is a French multinational insurance firm offering life, health, and property insurance, as well as investment management services worldwide.'
+    },
+    { 
+        id: 20, 
+        name: 'Swiss Re', 
+        type: 'Reinsurance', 
+        icon: 'fa-globe', 
+        badge: 'Premium',
+        founded: '1863',
+        headquarters: 'Zurich, Switzerland',
+        website: 'https://www.swissre.com/',
+        email: 'info@swissre.com',
+        rating: 'AA',
+        description: 'Swiss Re is a leading global reinsurer providing reinsurance, insurance, and other insurance-based forms of risk transfer to clients worldwide.'
+    },
+    { 
+        id: 21, 
+        name: 'Zurich Insurance Group', 
+        type: 'Property & Casualty', 
+        icon: 'fa-building', 
+        badge: 'Global',
+        founded: '1872',
+        headquarters: 'Zurich, Switzerland',
+        website: 'https://www.zurich.com/',
+        email: 'info@zurich.com',
+        rating: 'AA',
+        description: 'Zurich Insurance Group is a leading multi-line insurer providing property, casualty, and life insurance products and services globally.'
+    },
+    { 
+        id: 22, 
+        name: 'Tokio Marine Holdings', 
+        type: 'Property & Casualty', 
+        icon: 'fa-building', 
+        badge: 'Premium',
+        founded: '1879',
+        headquarters: 'Tokyo, Japan',
+        website: 'https://www.tokiomarinehd.com/',
+        email: 'info@tokiomarine.com',
+        rating: 'A+',
+        description: 'Tokio Marine is a Japanese insurance holding company, operating in the property and casualty insurance market with a global presence.'
+    },
+    { 
+        id: 23, 
+        name: 'Markel Group', 
+        type: 'Property & Casualty', 
+        icon: 'fa-chart-line', 
+        badge: 'Growth',
+        founded: '1930',
+        headquarters: 'Richmond, USA',
+        website: 'https://www.markel.com/',
+        email: 'info@markel.com',
+        rating: 'A',
+        description: 'Markel Group combines insurance with aggressive investment approaches, mimicking Berkshire Hathaway\'s business model with a focus on specialty insurance.'
+    },
+    { 
+        id: 24, 
+        name: 'Assicurazioni Generali', 
+        type: 'Life & P&C', 
+        icon: 'fa-star', 
+        badge: 'Global',
+        founded: '1831',
+        headquarters: 'Trieste, Italy',
+        website: 'https://www.generali.com/',
+        email: 'info@generali.com',
+        rating: 'AA-',
+        description: 'Assicurazioni Generali is a leading global insurance company and one of the largest in Europe, offering a wide range of insurance and financial products.'
+    },
+    { 
+        id: 25, 
+        name: 'Great-West Lifeco', 
+        type: 'Life Insurance', 
+        icon: 'fa-building', 
+        badge: 'Trusted',
+        founded: '1990',
+        headquarters: 'Winnipeg, Canada',
+        website: 'https://www.greatwestlifeco.com/',
+        email: 'info@greatwestlifeco.com',
+        rating: 'AA',
+        description: 'Great-West Lifeco is a leading insurance holding company offering life and health insurance, retirement savings, and wealth management services.'
+    }
+];
+
+        // ===== CRM MANAGERS =====
+        const crmManagers = [
+            { name: 'Rakesh Sharma', role: 'Investment Advisor', email: 'ashwanth1325@gmail.com' },
+            { name: 'Rajesh Kumar', role: 'Senior Analyst', email: 'ashwanth1325@gmail.com' },
+            { name: 'Priya Patel', role: 'Portfolio Manager', email: 'ashwanth1325@gmail.com' },
+            { name: 'Amit Singh', role: 'Investment Specialist', email: 'ashwanth1325@gmail.com' },
+            { name: 'Sneha Reddy', role: 'Wealth Advisor', email: 'ashwanth1325@gmail.com' },
+            { name: 'Vikram Rao', role: 'Risk Analyst', email: 'ashwanth1325@gmail.com' },
+            { name: 'Ananya Gupta', role: 'Investment Consultant', email: 'ashwanth1325@gmail.com' },
+            { name: 'Arjun Nair', role: 'Financial Advisor', email: 'ashwanth1325@gmail.com' }
+        ];
+
+        // ===== RENDER INSURANCE COMPANIES =====
+        function renderInsurance() {
+            const container = document.getElementById('insuranceList');
+            container.innerHTML = insuranceCompanies.map(company => `
+                <div class="insurance-item" onclick="viewInsurance(${company.id})">
+                    <div class="insurance-icon"><i class="fas ${company.icon}"></i></div>
+                    <div class="insurance-info">
+                        <div class="name">${company.name}</div>
+                        <div class="type">${company.type}</div>
+                    </div>
+                    <span class="insurance-badge">${company.badge}</span>
+                    <span class="insurance-arrow"><i class="fas fa-chevron-right"></i></span>
+                </div>
+            `).join('');
+        }
+
+        // ===== VIEW INSURANCE DETAILS =====
+        function viewInsurance(id) {
+            localStorage.setItem('viewingInsuranceId', id);
+            window.location.href = 'insurance-details.html';
+        }
+
+        // ===== RENDER ENTREPRENEURS =====
+        async function renderEntrepreneurs() {
+            const container = document.getElementById('entrepreneursList');
+            const count = document.getElementById('entrepreneurCount');
+
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                    <div style="display: inline-block; width: 30px; height: 30px; border: 3px solid rgba(0,0,0,0.06); border-radius: 50%; border-top-color: var(--accent-1); animation: spin 0.8s linear infinite; margin-bottom: 12px;"></div>
+                    <p>Loading entrepreneurs...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/api/users`);
+                const result = await response.json();
+
+                if (response.ok && result.users) {
+                    const entrepreneurs = result.users.filter(user => 
+                        user.role === 'ENTREPRENEUR' && 
+                        user.ideas && 
+                        user.ideas.length > 0
+                    );
+
+                    count.textContent = entrepreneurs.length;
+
+                    if (entrepreneurs.length === 0) {
+                        container.innerHTML = `
+                            <div class="no-entrepreneurs">
+                                <i class="fas fa-lightbulb"></i>
+                                <h4>No Ideas Available Yet</h4>
+                                <p>Entrepreneurs haven't uploaded any ideas yet. Check back later!</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = entrepreneurs.map(entrepreneur => {
+                        const initials = entrepreneur.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                        const lastIdea = entrepreneur.ideas[entrepreneur.ideas.length - 1];
+                        const ideaCount = entrepreneur.ideas.length;
+                        
+                        return `
+                            <div class="entrepreneur-item" onclick="viewIdea('${entrepreneur.id}')">
+                                <div class="e-avatar">${initials}</div>
+                                <div class="e-info">
+                                    <div class="name">${entrepreneur.fullName}</div>
+                                    <div class="details">
+                                        <span><i class="fas fa-building"></i> ${entrepreneur.entrepreneurDetails?.companyName || 'N/A'}</span>
+                                        <span><i class="fas fa-file-alt"></i> ${ideaCount} idea${ideaCount > 1 ? 's' : ''}</span>
+                                        <span><i class="fas fa-dollar-sign"></i> $${lastIdea?.capitalNeeded || 'N/A'}</span>
+                                    </div>
+                                </div>
+                                <span class="e-status ${lastIdea?.status === 'Reviewed' ? 'reviewed' : ''}">
+                                    ${lastIdea?.status || 'Pending'}
+                                </span>
+                                <span class="e-arrow"><i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        `;
+                    }).join('');
+
+                } else {
+                    container.innerHTML = `
+                        <div class="no-entrepreneurs">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h4>Error Loading Entrepreneurs</h4>
+                            <p>${result.error || 'Please try again later.'}</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Error fetching entrepreneurs:', error);
+                container.innerHTML = `
+                    <div class="no-entrepreneurs">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h4>Network Error</h4>
+                        <p>Please check if the server is running.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ===== VIEW IDEA =====
+        function viewIdea(entrepreneurId) {
+            localStorage.setItem('viewingEntrepreneurId', entrepreneurId);
+            window.location.href = 'idea-details.html';
+        }
+
+        // ===== RENDER CRM MANAGERS =====
+        function renderCRM() {
+            const container = document.getElementById('crmList');
+            container.innerHTML = crmManagers.map(crm => {
+                const initials = crm.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                return `
+                    <div class="crm-item" onclick="openGmail('${crm.email}')">
+                        <div class="crm-avatar">${initials}</div>
+                        <div class="crm-info">
+                            <div class="name">${crm.name}</div>
+                            <div class="role">${crm.role}</div>
+                        </div>
+                        <button class="crm-email-btn" onclick="event.stopPropagation(); openGmail('${crm.email}')">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===== OPEN GMAIL =====
+        function openGmail(email) {
+            const subject = encodeURIComponent('Investment query about startups');
+            const body = encodeURIComponent(
+                'Hi Investment Team,%0A%0A' +
+                'I hope this email finds you well.%0A%0A' +
+                'I am an investor on Artha Samridhi and I am reaching out to discuss:%0A%0A' +
+                '1. Investment opportunities in promising startups%0A' +
+                '2. Portfolio diversification strategies%0A' +
+                '3. Risk assessment and due diligence%0A%0A' +
+                'Please let me know a convenient time to connect.%0A%0A' +
+                'Looking forward to your response.%0A%0A' +
+                'Thanks,%0A' +
+                userData.fullName || 'Investor'
+            );
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, '_blank');
+        }
+
+        // ===== REFRESH ENTREPRENEURS EVERY 15 SECONDS =====
+        setInterval(() => {
+            renderEntrepreneurs();
+        }, 15000);
+
+        // ===== INIT =====
+        renderInsurance();
+        renderEntrepreneurs();
+        renderCRM();
+
+        // ===== CONSOLE =====
+        console.log('%c💰 Artha Samridhi Investor Dashboard', 'font-size: 20px; font-weight: bold; color: #1a237e;');
+        console.log(`%cWelcome back, ${userData.fullName}!`, 'font-size: 14px; color: #4a4a6a;');
+        console.log('%c📋 Dashboard loaded successfully', 'font-size: 12px; color: #8a8aa8;');
+        console.log('%c💡 Click on any entrepreneur to view their idea details', 'font-size: 12px; color: #f77f00;');
+        console.log('%c🏢 Click on any insurance company to view details', 'font-size: 12px; color: #1a237e;');
+        console.log('%c⚖️ Click "Legal" to see registered advocates', 'font-size: 12px; color: #1a237e;');
+        console.log('%c📊 Click "Tax" to see registered CA graduates', 'font-size: 12px; color: #1a237e;');
+        console.log('%c🔄 Auto-refreshing entrepreneurs every 15 seconds', 'font-size: 12px; color: #2e7d32;');
+        console.log('%c🌐 Language selector available - click the globe icon to translate', 'font-size: 12px; color: #1a237e;');
+    </script>
+
+</body>
+</html>

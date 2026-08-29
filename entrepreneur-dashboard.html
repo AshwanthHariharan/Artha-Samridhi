@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VentureCap — Entrepreneur Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f1f2f6;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #8a8aa8;
+            --accent-1: #1a237e;
+            --accent-2: #283593;
+            --accent-3: #3949ab;
+            --accent-4: #5c6bc0;
+            --accent-gradient: linear-gradient(135deg, #1a237e 0%, #283593 40%, #3949ab 70%, #5c6bc0 100%);
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 40px rgba(26, 35, 126, 0.10);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --success-color: #2e7d32;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========== SOFT ORBS ========== */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+            animation: orbFloat 25s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(26, 35, 126, 0.06);
+            top: -15%;
+            right: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(57, 73, 171, 0.04);
+            bottom: -15%;
+            left: -10%;
+            animation-delay: -8s;
+        }
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(26, 35, 126, 0.03);
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: -16s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -60px) scale(1.1); }
+            66% { transform: translate(-40px, 50px) scale(0.9); }
+            100% { transform: translate(30px, -30px) scale(1.05); }
+        }
+
+        /* ========== LANGUAGE SELECTOR ========== */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 100px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            font-family: inherit;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--text-primary);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius-sm);
+            padding: 6px 0;
+            box-shadow: var(--shadow-hover);
+            min-width: 180px;
+            max-height: 350px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .lang-dropdown.open {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .lang-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .lang-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            color: var(--text-primary);
+        }
+
+        .lang-item.active {
+            background: rgba(26, 35, 126, 0.06);
+            color: var(--accent-1);
+        }
+
+        .lang-item .lang-code {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+
+        .lang-item .lang-check {
+            margin-left: auto;
+            color: var(--accent-1);
+            font-size: 0.7rem;
+        }
+
+        #translatingStatus {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: 8px;
+            display: none;
+        }
+
+        #translatingStatus i {
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1200px;
+            z-index: 1000;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(24px);
+            border-radius: 60px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .navbar.scrolled {
+            top: 0;
+            left: 0;
+            transform: translateX(0);
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            padding: 10px 32px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .logo .logo-img {
+            height: 38px;
+            width: 38px;
+            border-radius: 50%;
+            object-fit: contain;
+            border: 2px solid rgba(26, 35, 126, 0.10);
+            padding: 2px;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .logo .logo-img {
+            height: 34px;
+            width: 34px;
+        }
+
+        .logo .logo-text {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .logo .logo-text .highlight {
+            color: var(--accent-1);
+        }
+
+        .logo .logo-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            margin-left: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 40px;
+            background: var(--accent-gradient);
+            color: #fff !important;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.15);
+            letter-spacing: 0.02em;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(26, 35, 126, 0.20);
+            color: #fff !important;
+        }
+
+        .nav-cta i {
+            margin-right: 8px;
+        }
+
+        .navbar.scrolled .nav-cta {
+            padding: 10px 44px;
+        }
+
+        /* ========== DASHBOARD CONTAINER ========== */
+        .dashboard-container {
+            padding: 140px 24px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== HEADER ========== */
+        .dashboard-header {
+            margin-bottom: 32px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .dashboard-header h1 .highlight {
+            color: var(--accent-1);
+        }
+
+        .dashboard-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+
+        /* ========== TOP NAV BAR ========== */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 12px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .top-nav .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .top-nav .nav-items a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .top-nav .nav-items a:hover {
+            background: rgba(26, 35, 126, 0.04);
+            color: var(--accent-1);
+        }
+
+        .top-nav .nav-items a.active {
+            background: rgba(26, 35, 126, 0.06);
+            color: var(--accent-1);
+        }
+
+        .top-nav .nav-items a i {
+            margin-right: 6px;
+        }
+
+        .top-nav .upload-btn {
+            padding: 10px 28px;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.15);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-nav .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(26, 35, 126, 0.20);
+        }
+
+        /* ========== DASHBOARD GRID ========== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 24px;
+        }
+
+        /* ========== LEFT PANEL - GOVT SCHEMES ========== */
+        .left-panel {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .left-panel h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .left-panel h3 i {
+            color: var(--accent-1);
+        }
+
+        .left-panel .schemes-scroll {
+            max-height: 550px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .left-panel .schemes-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .left-panel .schemes-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 10px;
+        }
+
+        .left-panel .schemes-scroll::-webkit-scrollbar-thumb {
+            background: rgba(26, 35, 126, 0.15);
+            border-radius: 10px;
+        }
+
+        .scheme-item {
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scheme-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            border-color: rgba(26, 35, 126, 0.08);
+            transform: translateX(4px);
+        }
+
+        .scheme-item .scheme-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(26, 35, 126, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-1);
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .scheme-item .scheme-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .scheme-item .scheme-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .scheme-item .scheme-info .name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .scheme-item .scheme-info .dept {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .scheme-item .scheme-badge {
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 100px;
+            background: rgba(46, 125, 50, 0.08);
+            color: var(--success-color);
+            white-space: nowrap;
+        }
+
+        .scheme-item .scheme-badge.central {
+            background: rgba(26, 35, 126, 0.08);
+            color: var(--accent-1);
+        }
+
+        .scheme-item .scheme-badge.state {
+            background: rgba(247, 127, 0, 0.08);
+            color: #ef6c00;
+        }
+
+        /* ========== CENTER PANEL - INVESTORS ========== */
+        .center-panel {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .center-panel .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .center-panel .panel-header h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .center-panel .panel-header h3 i {
+            color: var(--accent-1);
+        }
+
+        .center-panel .panel-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.04);
+            padding: 2px 12px;
+            border-radius: 100px;
+        }
+
+        .investor-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .investor-card:hover {
+            border-color: rgba(26, 35, 126, 0.08);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .investor-card .investor-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .investor-card .investor-info {
+            flex: 1;
+        }
+
+        .investor-card .investor-info .name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .investor-card .investor-info .details {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .investor-card .investor-status {
+            font-size: 0.65rem;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-weight: 500;
+        }
+
+        .investor-card .investor-status.high {
+            background: rgba(46, 125, 50, 0.12);
+            color: var(--success-color);
+        }
+
+        .investor-card .investor-status.medium {
+            background: rgba(247, 127, 0, 0.10);
+            color: #ef6c00;
+        }
+
+        .investor-card .investor-status.low {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-muted);
+        }
+
+        .no-investors {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-investors i {
+            font-size: 3.5rem;
+            opacity: 0.2;
+            margin-bottom: 12px;
+            color: var(--accent-1);
+        }
+
+        .no-investors h4 {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .no-investors p {
+            font-size: 0.9rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* ========== RIGHT PANEL - CRM ========== */
+        .right-panel {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .right-panel h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .right-panel h3 i {
+            color: var(--accent-1);
+        }
+
+        .crm-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .crm-item:hover {
+            background: rgba(26, 35, 126, 0.04);
+            border-color: rgba(26, 35, 126, 0.08);
+            transform: translateX(4px);
+        }
+
+        .crm-item .crm-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .crm-item .crm-info {
+            flex: 1;
+        }
+
+        .crm-item .crm-info .name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .crm-item .crm-info .role {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .crm-item .crm-email-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 4px;
+            font-size: 0.85rem;
+        }
+
+        .crm-item .crm-email-btn:hover {
+            color: #d44637;
+            transform: scale(1.1);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 240px 1fr 260px;
+                gap: 18px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .left-panel,
+            .right-panel {
+                max-height: 400px;
+                overflow-y: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                top: 0;
+                left: 0;
+                transform: translateX(0);
+                width: 100%;
+                border-radius: 0;
+                padding: 10px 16px;
+                background: rgba(255, 255, 255, 0.90);
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            }
+            .navbar.scrolled {
+                padding: 8px 16px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .dashboard-container {
+                padding: 110px 16px 30px;
+            }
+            .top-nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .top-nav .nav-items {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .top-nav .nav-items a {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            .top-nav .upload-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+            .left-panel,
+            .right-panel {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+            .investor-card {
+                flex-wrap: wrap;
+            }
+            .scheme-item .scheme-info .name {
+                font-size: 0.75rem;
+            }
+            .language-selector {
+                margin-left: 4px;
+            }
+            .lang-btn .lang-label {
+                display: none;
+            }
+            .lang-dropdown {
+                right: -20px;
+                min-width: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 100px 12px 20px;
+            }
+            .dashboard-header h1 {
+                font-size: 1.3rem;
+            }
+            .navbar {
+                padding: 8px 14px;
+            }
+            .navbar.scrolled {
+                padding: 6px 14px;
+            }
+            .logo .logo-img {
+                height: 28px;
+                width: 28px;
+            }
+            .logo .logo-text {
+                font-size: 1rem;
+            }
+            .nav-cta {
+                padding: 6px 18px;
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+            .nav-cta i {
+                margin-right: 4px;
+            }
+            .left-panel,
+            .right-panel {
+                max-height: 250px;
+            }
+            .scheme-item {
+                padding: 8px 10px;
+            }
+            .scheme-item .scheme-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+            .scheme-item .scheme-info .name {
+                font-size: 0.7rem;
+            }
+            .lang-btn {
+                padding: 4px 10px;
+                font-size: 0.7rem;
+            }
+            .lang-dropdown {
+                right: -40px;
+                min-width: 140px;
+            }
+        }
+                /* ========== CHATBOT BUTTON ========== */
+        .chatbot-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 20px rgba(26, 35, 126, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .chatbot-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 40px rgba(26, 35, 126, 0.35);
+        }
+
+        .chatbot-fab .fa-robot {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* ===== CHATBOT SIDEBAR ===== */
+        .chatbot-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg-card);
+            box-shadow: -4px 0 40px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .chatbot-sidebar.open {
+            right: 0;
+        }
+
+        .chatbot-sidebar-header {
+            padding: 20px 24px;
+            background: var(--accent-gradient);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .chatbot-sidebar-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chatbot-sidebar-header .close-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 4px;
+        }
+
+        .chatbot-sidebar-header .close-btn:hover {
+            color: #fff;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: var(--bg-primary);
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(26, 35, 126, 0.15);
+            border-radius: 10px;
+        }
+
+        .chatbot-message {
+            display: flex;
+            gap: 10px;
+            max-width: 92%;
+            animation: slideIn 0.3s ease;
+        }
+
+        .chatbot-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .chatbot-message.bot {
+            align-self: flex-start;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chatbot-message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .chatbot-message.bot .chatbot-message-avatar {
+            background: var(--accent-gradient);
+            color: #fff;
+        }
+
+        .chatbot-message.user .chatbot-message-avatar {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-muted);
+        }
+
+        .chatbot-message-content {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .chatbot-message.bot .chatbot-message-content {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-top-left-radius: 4px;
+        }
+
+        .chatbot-message.user .chatbot-message-content {
+            background: var(--accent-gradient);
+            color: #fff;
+            border-top-right-radius: 4px;
+        }
+
+        .chatbot-message-content p {
+            margin: 0;
+        }
+
+        .chatbot-message-content p + p {
+            margin-top: 6px;
+        }
+
+        .chatbot-typing {
+            display: flex;
+            gap: 4px;
+            padding: 4px 0;
+        }
+
+        .chatbot-typing span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+
+        .chatbot-typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chatbot-typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .chatbot-input-area {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            background: var(--bg-card);
+        }
+
+        .chatbot-input-area input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .chatbot-input-area input:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.06);
+        }
+
+        .chatbot-input-area input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chatbot-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chatbot-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.20);
+        }
+
+        .chatbot-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chatbot-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .chatbot-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SOFT ORBS ===== -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="VentureCap" class="logo-img" onerror="this.style.display='none'" />
+                <span class="logo-text">Venture<span class="highlight">Cap</span><span class="logo-dot"></span></span>
+            </a>
+
+            <div class="nav-links">
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="index.html" class="nav-cta">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+
+            <!-- ===== LANGUAGE SELECTOR ===== -->
+            <div class="language-selector">
+                <button class="lang-btn" onclick="toggleLanguageMenu()" title="Select Language (Ctrl+Shift+L)">
+                    <i class="fas fa-globe"></i>
+                    <span id="currentLangLabel" class="lang-label">English</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.6rem;"></i>
+                </button>
+                <div class="lang-dropdown" id="langDropdown"></div>
+            </div>
+            <span id="translatingStatus"><i class="fas fa-spinner fa-spin"></i> Translating...</span>
+
+        </div>
+    </nav>
+
+    <!-- ===== DASHBOARD CONTAINER ===== -->
+    <div class="dashboard-container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="dashboard-header">
+            <h1>Entrepreneur <span class="highlight">Dashboard</span></h1>
+            <p>Welcome back! Track your startup journey, connect with investors, and access government schemes.</p>
+        </div>
+
+        <!-- ===== TOP NAV BAR ===== -->
+        <div class="top-nav">
+            <div class="nav-items">
+                <a href="legal.html"><i class="fas fa-gavel"></i> Legal</a>
+                <a href="tax.html"><i class="fas fa-calculator"></i> Tax</a>
+                <a href="#" class="active"><i class="fas fa-handshake"></i> Investors</a>
+            </div>
+            <a href="upload.html" class="upload-btn">
+                <i class="fas fa-upload"></i> Upload Your Idea
+            </a>
+        </div>
+
+        <!-- ===== DASHBOARD GRID ===== -->
+        <div class="dashboard-grid">
+
+            <!-- ===== LEFT PANEL - GOVT SCHEMES ===== -->
+            <div class="left-panel">
+                <h3><i class="fas fa-landmark"></i> Govt. Schemes</h3>
+                <div class="schemes-scroll" id="schemesList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- ===== CENTER PANEL - INTERESTED INVESTORS ===== -->
+            <div class="center-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-users"></i> Interested Investors</h3>
+                    <span class="count" id="investorCount">0</span>
+                </div>
+                <div id="investorsList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- ===== RIGHT PANEL - CRM ===== -->
+            <div class="right-panel">
+                <h3><i class="fas fa-headset"></i> Customer Relationship Managers</h3>
+                <div id="crmList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <!-- ===== CHATBOT FAB BUTTON ===== -->
+    <button class="chatbot-fab" onclick="toggleChatbot()" id="chatbotToggle" title="Chat with AI Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- ===== CHATBOT SIDEBAR ===== -->
+    <div class="chatbot-sidebar" id="chatbotSidebar">
+        <div class="chatbot-sidebar-header">
+            <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+            <button class="close-btn" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot">
+                <div class="chatbot-message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-message-content">
+                    <p>Hello! 👋 I'm your AI assistant for Artha Samridhi. How can I help you with your venture today?</p>
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Type your message..." onkeydown="handleChatbotKeypress(event)" />
+            <button class="chatbot-send-btn" onclick="sendChatbotMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="translator.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        // ===== CONFIGURATION =====
+        const API_URL = 'http://localhost:5000';
+
+        // ===== CHECK USER & ROLE =====
+        const userData = JSON.parse(localStorage.getItem('userData'));
+
+        if (!userData) {
+            window.location.href = 'index.html';
+        }
+
+        if (userData.role !== 'ENTREPRENEUR') {
+            window.location.href = 'profile.html';
+        }
+
+        // ===== NAVBAR SCROLL EFFECT =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // ===== ALL GOVERNMENT SCHEMES IN INDIA =====
+        const schemes = [
+            { 
+                id: 1, 
+                name: 'Startup India', 
+                dept: 'DPIIT', 
+                icon: 'fa-rocket', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'startup-india.png',
+                description: 'Flagship initiative by Government of India to build a strong ecosystem for nurturing innovation and startups. Provides funding support, tax exemptions, and mentorship.',
+                link: 'https://www.startupindia.gov.in/',
+                benefits: ['Tax Exemption', 'Funding Support', 'Mentorship', 'IPR Support']
+            },
+            { 
+                id: 2, 
+                name: 'MSME Samadhaan', 
+                dept: 'MSME Ministry', 
+                icon: 'fa-industry', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'msme.png',
+                description: 'Portal for MSMEs to file complaints regarding delayed payments and get them resolved through the MSME Development Act.',
+                link: 'https://samadhaan.msme.gov.in/',
+                benefits: ['Payment Recovery', 'Dispute Resolution', 'Legal Support']
+            },
+            { 
+                id: 3, 
+                name: 'Stand-Up India', 
+                dept: 'SIDBI', 
+                icon: 'fa-hand-holding-heart', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'standup-india.png',
+                description: 'Promoting entrepreneurship among women and SC/ST communities with loans from ₹10 lakh to ₹1 crore for greenfield enterprises.',
+                link: 'https://www.standupmitra.in/',
+                benefits: ['Loans up to ₹1 Crore', 'Women Entrepreneurship', 'SC/ST Support']
+            },
+            { 
+                id: 4, 
+                name: 'Pradhan Mantri Mudra Yojana', 
+                dept: 'SIDBI', 
+                icon: 'fa-money-bill-wave', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'mudra.png',
+                description: 'Provides loans up to ₹10 lakh to non-corporate, non-farm small/micro enterprises under Shishu, Kishor, and Tarun categories.',
+                link: 'https://www.mudra.org.in/',
+                benefits: ['Loans up to ₹10 Lakh', 'No Collateral', '3 Loan Categories']
+            },
+            { 
+                id: 5, 
+                name: 'ASPIRE', 
+                dept: 'MSME Ministry', 
+                icon: 'fa-chart-line', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'aspire.png',
+                description: 'A Scheme for Promotion of Innovation, Rural Industry & Entrepreneurship. Promotes innovation and entrepreneurship in rural areas.',
+                link: 'https://www.aspire.gov.in/',
+                benefits: ['Rural Entrepreneurship', 'Innovation Support', 'Incubation Centers']
+            },
+            { 
+                id: 6, 
+                name: 'PM Employment Generation Programme', 
+                dept: 'KVIC', 
+                icon: 'fa-briefcase', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'pmegp.png',
+                description: 'Credit-linked subsidy scheme for generating employment opportunities through setting up micro-enterprises in rural and urban areas.',
+                link: 'https://pmegp.kviconline.gov.in/',
+                benefits: ['Employment Generation', 'Subsidy Support', 'Rural Development']
+            },
+            { 
+                id: 7, 
+                name: 'Digital India', 
+                dept: 'MeitY', 
+                icon: 'fa-laptop-code', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'digital-india.png',
+                description: 'Transform India into a digitally empowered society and knowledge economy. Provides digital infrastructure and services.',
+                link: 'https://www.digitalindia.gov.in/',
+                benefits: ['Digital Infrastructure', 'Tech Support', 'E-Governance']
+            },
+            { 
+                id: 8, 
+                name: 'NSDC Skill Development', 
+                dept: 'NSDC', 
+                icon: 'fa-graduation-cap', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'nsdc.png',
+                description: 'Skill development and vocational training for youth to enhance employability and entrepreneurial skills across various sectors.',
+                link: 'https://nsdcindia.org/',
+                benefits: ['Skill Training', 'Certification', 'Job Placement']
+            },
+            { 
+                id: 9, 
+                name: 'Atal Innovation Mission', 
+                dept: 'NITI Aayog', 
+                icon: 'fa-lightbulb', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'aim.png',
+                description: 'Promotes innovation and entrepreneurship across schools, colleges, and research institutions through Atal Tinkering Labs and incubators.',
+                link: 'https://aim.gov.in/',
+                benefits: ['Atal Tinkering Labs', 'Incubation', 'Innovation Grants']
+            },
+            { 
+                id: 10, 
+                name: 'SIDBI Fund of Funds', 
+                dept: 'SIDBI', 
+                icon: 'fa-hand-holding-usd', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'sidbi.png',
+                description: 'Provides funding to venture capital funds that invest in startups and MSMEs. Supports the startup ecosystem through capital infusion.',
+                link: 'https://www.sidbi.in/',
+                benefits: ['Venture Capital', 'Startup Funding', 'MSME Support']
+            },
+            { 
+                id: 11, 
+                name: 'CGTMSE', 
+                dept: 'SIDBI/NABARD', 
+                icon: 'fa-shield-alt', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'cgtmse.png',
+                description: 'Credit Guarantee Fund Trust for Micro and Small Enterprises provides guarantee cover to banks for loans given to MSMEs without collateral.',
+                link: 'https://www.cgtmse.in/',
+                benefits: ['No Collateral Loans', 'Guarantee Cover', 'MSME Support']
+            },
+            { 
+                id: 12, 
+                name: 'MAKE IN INDIA', 
+                dept: 'DPIIT', 
+                icon: 'fa-industry', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'make-in-india.png',
+                description: 'National program facilitating investment, fostering innovation, enhancing skill development, and building best-in-class manufacturing infrastructure.',
+                link: 'https://www.makeinindia.com/',
+                benefits: ['Investment Support', 'Manufacturing Boost', 'Ease of Doing Business']
+            },
+            { 
+                id: 13, 
+                name: 'PMKVY', 
+                dept: 'MSDE', 
+                icon: 'fa-user-graduate', 
+                badge: 'Central',
+                badgeClass: 'central',
+                logo: 'pmkvy.png',
+                description: 'Pradhan Mantri Kaushal Vikas Yojana is a skill development scheme that provides training and certification to youth for better employment opportunities.',
+                link: 'https://www.pmkvyofficial.org/',
+                benefits: ['Skill Training', 'Certification', 'Placement Support']
+            },
+            { 
+                id: 14, 
+                name: 'Startup Tamil Nadu', 
+                dept: 'Tamil Nadu Govt', 
+                icon: 'fa-rocket', 
+                badge: 'State',
+                badgeClass: 'state',
+                logo: 'startup-tn.png',
+                description: 'Tamil Nadu\'s startup policy providing funding, incubation, and mentorship to startups in the state. Focuses on innovation and job creation.',
+                link: 'https://startup.tn.gov.in/',
+                benefits: ['State Funding', 'Incubation', 'Mentorship']
+            },
+            { 
+                id: 15, 
+                name: 'Karnataka Startup Policy', 
+                dept: 'Karnataka Govt', 
+                icon: 'fa-rocket', 
+                badge: 'State',
+                badgeClass: 'state',
+                logo: 'startup-karnataka.png',
+                description: 'Karnataka\'s startup policy aims to make the state a global startup hub with funding, incubation, and regulatory support for entrepreneurs.',
+                link: 'https://www.startupkarnataka.org/',
+                benefits: ['State Funding', 'Incubation', 'Regulatory Support']
+            }
+        ];
+
+        // ===== CRM MANAGERS =====
+        const crmManagers = [
+            { name: 'Rakesh Sharma', role: 'Senior CRM', email: 'ashwanth1325@gmail.com' },
+            { name: 'Rajesh Kumar', role: 'CRM Manager', email: 'ashwanth1325@gmail.com' },
+            { name: 'Priya Patel', role: 'CRM Executive', email: 'ashwanth1325@gmail.com' },
+            { name: 'Amit Singh', role: 'CRM Specialist', email: 'ashwanth1325@gmail.com' },
+            { name: 'Sneha Reddy', role: 'CRM Lead', email: 'ashwanth1325@gmail.com' },
+            { name: 'Vikram Rao', role: 'CRM Associate', email: 'ashwanth1325@gmail.com' },
+            { name: 'Ananya Gupta', role: 'CRM Analyst', email: 'ashwanth1325@gmail.com' },
+            { name: 'Arjun Nair', role: 'CRM Coordinator', email: 'ashwanth1325@gmail.com' }
+        ];
+
+        // ===== RENDER SCHEMES =====
+        function renderSchemes() {
+            const container = document.getElementById('schemesList');
+            container.innerHTML = schemes.map(scheme => `
+                <div class="scheme-item" onclick="openScheme(${scheme.id})">
+                    <div class="scheme-icon">
+                        ${scheme.logo ? `<img src="${scheme.logo}" alt="${scheme.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas ${scheme.icon}\\'></i>'" />` : `<i class="fas ${scheme.icon}"></i>`}
+                    </div>
+                    <div class="scheme-info">
+                        <div class="name">${scheme.name}</div>
+                        <div class="dept">${scheme.dept}</div>
+                    </div>
+                    <span class="scheme-badge ${scheme.badgeClass}">${scheme.badge}</span>
+                </div>
+            `).join('');
+        }
+
+        // ===== OPEN SCHEME DETAILS =====
+        function openScheme(id) {
+            const scheme = schemes.find(s => s.id === id);
+            if (scheme) {
+                localStorage.setItem('selectedScheme', JSON.stringify(scheme));
+                window.location.href = 'scheme-details.html';
+            }
+        }
+
+        // ===== RENDER INVESTOR INTERESTS =====
+        function renderInvestorInterests() {
+            const container = document.getElementById('investorsList');
+            const count = document.getElementById('investorCount');
+
+            const interests = JSON.parse(localStorage.getItem('investorInterests') || '[]');
+            const userInterests = interests.filter(i => i.entrepreneurId === userData.id);
+
+            count.textContent = userInterests.length;
+
+            if (userInterests.length === 0) {
+                container.innerHTML = `
+                    <div class="no-investors">
+                        <i class="fas fa-users"></i>
+                        <h4>No Investors Yet</h4>
+                        <p>Investors who show interest in your idea will appear here. 
+                        Upload your idea to attract investors!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = userInterests.map(interest => {
+                const initials = interest.investorName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                const interestLevel = interest.interestLevel || 'Interested';
+                const statusClass = interestLevel === 'High Interest' ? 'high' : 
+                                   interestLevel === 'Medium Interest' ? 'medium' : 'low';
+                
+                return `
+                    <div class="investor-card">
+                        <div class="investor-avatar">${initials}</div>
+                        <div class="investor-info">
+                            <div class="name">${interest.investorName}</div>
+                            <div class="details">
+                                <i class="fas fa-heart" style="color: ${statusClass === 'high' ? 'var(--success-color)' : statusClass === 'medium' ? '#ef6c00' : 'var(--text-muted)'};"></i>
+                                ${interest.interestLevel || 'Interested'} · 
+                                ${new Date(interest.submittedAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <span class="investor-status ${statusClass}">
+                            ${interest.interestLevel || 'Interested'}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===== RENDER CRM MANAGERS =====
+        function renderCRM() {
+            const container = document.getElementById('crmList');
+            container.innerHTML = crmManagers.map(crm => {
+                const initials = crm.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                return `
+                    <div class="crm-item" onclick="openGmail('${crm.email}')">
+                        <div class="crm-avatar">${initials}</div>
+                        <div class="crm-info">
+                            <div class="name">${crm.name}</div>
+                            <div class="role">${crm.role}</div>
+                        </div>
+                        <button class="crm-email-btn" onclick="event.stopPropagation(); openGmail('${crm.email}')">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===== OPEN GMAIL =====
+        function openGmail(email) {
+            const subject = encodeURIComponent('Query about my startup venture');
+            const body = encodeURIComponent(
+                'Hi CRM Team,%0A%0A' +
+                'I hope this email finds you well.%0A%0A' +
+                'I am reaching out regarding my startup venture. I would like to discuss the following:%0A%0A' +
+                '1. Funding opportunities%0A' +
+                '2. Mentorship and guidance%0A' +
+                '3. Networking and partnerships%0A%0A' +
+                'Please let me know a convenient time to connect.%0A%0A' +
+                'Looking forward to your response.%0A%0A' +
+                'Thanks,%0A' +
+                userData.fullName || 'Entrepreneur'
+            );
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, '_blank');
+        }
+
+        // ===== REFRESH INVESTOR INTERESTS EVERY 10 SECONDS =====
+        setInterval(() => {
+            renderInvestorInterests();
+        }, 10000);
+
+        // ===== INIT =====
+        renderSchemes();
+        renderInvestorInterests();
+        renderCRM();
+
+        // ===== CONSOLE =====
+        console.log('%c🚀 VentureCap Entrepreneur Dashboard', 'font-size: 20px; font-weight: bold; color: #1a237e;');
+        console.log(`%cWelcome back, ${userData.fullName}!`, 'font-size: 14px; color: #4a4a6a;');
+        console.log('%c📋 Dashboard loaded successfully', 'font-size: 12px; color: #8a8aa8;');
+        console.log('%c🏛️ 15 Government Schemes loaded (Central + State)', 'font-size: 12px; color: #1a237e;');
+        console.log('%c💡 Investor interests will appear here when investors show interest in your ideas.', 'font-size: 12px; color: #f77f00;');
+        console.log('%c🔄 Auto-refreshing investor interests every 10 seconds', 'font-size: 12px; color: #2e7d32;');
+        console.log('%c📁 Place scheme logos in the "logos" folder (e.g., startup-india.png)', 'font-size: 12px; color: #8a8aa8;');
+        console.log('%c🌐 Language selector available - click the globe icon to translate', 'font-size: 12px; color: #1a237e;');
+    </script>
+
+</body>
+</html>
